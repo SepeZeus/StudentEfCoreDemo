@@ -14,9 +14,7 @@ namespace StudentEfCoreDemo.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Team>()
-                .HasMany(t => t.Players)
-                .WithOne(p => p.Team)
-                .HasForeignKey(p => p.TeamId);
+                .HasMany(t => t.Players);
 
             base.OnModelCreating(modelBuilder);
         }

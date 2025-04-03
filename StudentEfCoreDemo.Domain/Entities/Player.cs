@@ -15,7 +15,6 @@ namespace StudentEfCoreDemo.Domain.Entities
         public string Position { get; set; } = string.Empty;
         public int TeamId { get; set; }
         public int Goals { get; set; }
-        public Team Team { get; set; } = null!;
 
     }
 }
