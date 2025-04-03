@@ -22,6 +22,7 @@ namespace StudentEfCoreDemo.Application.Features.Players.Queries
             var players = await _playerRepository.GetPlayers();
             return players.Select(player => new PlayerDto
             {
+                Id = player.Id,
                 FirstName = player.FirstName,
                 LastName = player.LastName,
                 Age = player.Age,

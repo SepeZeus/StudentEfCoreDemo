@@ -4,30 +4,33 @@ using StudentEfCoreDemo.Infrastructure.Data;
 using System.Threading.Tasks;
 using Xunit;
 
-public class DatabaseTests
+namespace StudentEfCoreDemo.Tests.Infrastructure.Repositories
 {
-    private readonly DbContextOptions<StudentContext> _dbContextOptions;
-
-    public DatabaseTests()
+    public class DatabaseTests
     {
-        _dbContextOptions = new DbContextOptionsBuilder<StudentContext>()
-            .UseInMemoryDatabase(databaseName: "TestDatabase")
-            .Options;
-    }
+        private readonly DbContextOptions<StudentContext> _dbContextOptions;
 
-    [Fact]
-    public async Task AddPlayer_ShouldAddPlayerToDatabase()
-    {
-        // Arrange
-        using var context = new StudentContext(_dbContextOptions);
-        var player = new Player { Id = 1, FirstName = "John", LastName = "Doe", Position = "Guard", TeamId = 1, Goals = 2};
+        public DatabaseTests()
+        {
+            _dbContextOptions = new DbContextOptionsBuilder<StudentContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
+        }
 
-        // Act
-        context.Players.Add(player);
-        await context.SaveChangesAsync();
+        [Fact]
+        public async Task AddPlayer_ShouldAddPlayerToDatabase()
+        {
+            // Arrange
+            using var context = new StudentContext(_dbContextOptions);
+            var player = new Player { Id = 1, FirstName = "John", LastName = "Doe", Position = "Guard", TeamId = 1, Goals = 2 };
 
-        // Assert
-        var savedPlayer = await context.Players.FirstOrDefaultAsync(p => p.FirstName == "John" && p.LastName == "Doe");
-        Assert.NotNull(savedPlayer);
+            // Act
+            context.Players.Add(player);
+            await context.SaveChangesAsync();
+
+            // Assert
+            var savedPlayer = await context.Players.FirstOrDefaultAsync(p => p.FirstName == "John" && p.LastName == "Doe");
+            Assert.NotNull(savedPlayer);
+        }
     }
 }

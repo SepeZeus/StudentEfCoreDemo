@@ -27,6 +27,7 @@ namespace StudentEfCoreDemo.Application.Features.Players.Queries
             }
             return new PlayerDto
             {
+                Id = player.Id,
                 FirstName = player.FirstName,
                 LastName = player.LastName,
                 Age = player.Age,

@@ -6,37 +6,40 @@ using StudentEfCoreDemo.Infrastructure.Repositories;
 using System.Threading.Tasks;
 using Xunit;
 
-public class TeamRepositoryTests
+namespace StudentEfCoreDemo.Tests.Infrastructure.Repositories
 {
-    private StudentContext GetDbContext()
+    public class TeamRepositoryTests
     {
-        var options = new DbContextOptionsBuilder<StudentContext>()
-            .UseInMemoryDatabase(databaseName: "TeamRepositoryTestDb")
-            .Options;
-        return new StudentContext(options);
-    }
-
-    [Fact]
-    public async Task AddTeam_ShouldAddTeamToDatabase()
-    {
-        // Arrange
-        var context = GetDbContext();
-        var repository = new TeamRepository(context);
-        var team = new Team
+        private StudentContext GetDbContext()
         {
-            Name = "Team A",
-            SportType = "Football",
-            FoundedDate = DateTime.Now,
-            HomeStadium = "Stadium A",
-            MaxRosterSize = 25,
-            Players = new List<Player>()
-        };
+            var options = new DbContextOptionsBuilder<StudentContext>()
+                .UseInMemoryDatabase(databaseName: "TeamRepositoryTestDb")
+                .Options;
+            return new StudentContext(options);
+        }
 
-        // Act
-        await repository.AddTeam(team);
+        [Fact]
+        public async Task AddTeam_ShouldAddTeamToDatabase()
+        {
+            // Arrange
+            var context = GetDbContext();
+            var repository = new TeamRepository(context);
+            var team = new Team
+            {
+                Name = "Team A",
+                SportType = "Football",
+                FoundedDate = DateTime.Now,
+                HomeStadium = "Stadium A",
+                MaxRosterSize = 25,
+                Players = new List<Player>()
+            };
 
-        // Assert
-        var savedTeam = await context.Teams.FirstOrDefaultAsync(t => t.Name == "Team A");
-        Assert.NotNull(savedTeam);
+            // Act
+            await repository.AddTeam(team);
+
+            // Assert
+            var savedTeam = await context.Teams.FirstOrDefaultAsync(t => t.Name == "Team A");
+            Assert.NotNull(savedTeam);
+        }
     }
 }

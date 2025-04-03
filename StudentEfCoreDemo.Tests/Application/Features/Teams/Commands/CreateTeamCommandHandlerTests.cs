@@ -7,39 +7,42 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-public class CreateTeamCommandHandlerTests
+namespace StudentEfCoreDemo.Tests.Application.Features.Teams.Commands
 {
-    private readonly Mock<ITeamRepository> _teamRepositoryMock;
-    private readonly CreateTeamCommandHandler _handler;
-
-    public CreateTeamCommandHandlerTests()
+    public class CreateTeamCommandHandlerTests
     {
-        _teamRepositoryMock = new Mock<ITeamRepository>();
-        _handler = new CreateTeamCommandHandler(_teamRepositoryMock.Object);
-    }
+        private readonly Mock<ITeamRepository> _teamRepositoryMock;
+        private readonly CreateTeamCommandHandler _handler;
 
-    [Fact]
-    public async Task Handle_ShouldCreateTeam()
-    {
-        // Arrange
-        var command = new CreateTeamCommand
+        public CreateTeamCommandHandlerTests()
         {
-            Name = "Team A",
-            SportType = "Football",
-            FoundedDate = DateTime.Now,
-            HomeStadium = "Stadium A",
-            MaxRosterSize = 25,
-            Players = new List<PlayerDto>()
-        };
+            _teamRepositoryMock = new Mock<ITeamRepository>();
+            _handler = new CreateTeamCommandHandler(_teamRepositoryMock.Object);
+        }
 
-        _teamRepositoryMock.Setup(repo => repo.AddTeam(It.IsAny<Team>())).ReturnsAsync(new Team { Id = 1 });
+        [Fact]
+        public async Task Handle_ShouldCreateTeam()
+        {
+            // Arrange
+            var command = new CreateTeamCommand
+            {
+                Name = "Team A",
+                SportType = "Football",
+                FoundedDate = DateTime.Now,
+                HomeStadium = "Stadium A",
+                MaxRosterSize = 25,
+                Players = new List<PlayerDto>()
+            };
 
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
+            _teamRepositoryMock.Setup(repo => repo.AddTeam(It.IsAny<Team>())).ReturnsAsync(new Team { Id = 1 });
 
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal(1, result.Id);
-        _teamRepositoryMock.Verify(repo => repo.AddTeam(It.IsAny<Team>()), Times.Once);
+            // Act
+            var result = await _handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(1, result.Id);
+            _teamRepositoryMock.Verify(repo => repo.AddTeam(It.IsAny<Team>()), Times.Once);
+        }
     }
 }

@@ -5,29 +5,31 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-public class DeleteTeamCommandHandlerTests
+namespace StudentEfCoreDemo.Tests.Application.Features.Teams.Commands
 {
-    private readonly Mock<ITeamRepository> _teamRepositoryMock;
-    private readonly DeleteTeamCommandHandler _handler;
-
-    public DeleteTeamCommandHandlerTests()
+    public class DeleteTeamCommandHandlerTests
     {
-        _teamRepositoryMock = new Mock<ITeamRepository>();
-        _handler = new DeleteTeamCommandHandler(_teamRepositoryMock.Object);
-    }
+        private readonly Mock<ITeamRepository> _teamRepositoryMock;
+        private readonly DeleteTeamCommandHandler _handler;
 
-    [Fact]
-    public async Task Handle_ShouldDeleteTeam()
-    {
-        // Arrange
-        var command = new DeleteTeamCommand(1);
-        _teamRepositoryMock.Setup(repo => repo.DeleteTeam(1)).Returns(Task.CompletedTask);
+        public DeleteTeamCommandHandlerTests()
+        {
+            _teamRepositoryMock = new Mock<ITeamRepository>();
+            _handler = new DeleteTeamCommandHandler(_teamRepositoryMock.Object);
+        }
 
-        // Act
-        await _handler.Handle(command, CancellationToken.None);
+        [Fact]
+        public async Task Handle_ShouldDeleteTeam()
+        {
+            // Arrange
+            var command = new DeleteTeamCommand(1);
+            _teamRepositoryMock.Setup(repo => repo.DeleteTeam(1)).Returns(Task.CompletedTask);
 
-        // Assert
-        _teamRepositoryMock.Verify(repo => repo.DeleteTeam(1), Times.Once);
+            // Act
+            await _handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            _teamRepositoryMock.Verify(repo => repo.DeleteTeam(1), Times.Once);
+        }
     }
 }
-
