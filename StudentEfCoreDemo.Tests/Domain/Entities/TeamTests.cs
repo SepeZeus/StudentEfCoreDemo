@@ -4,18 +4,18 @@ using Xunit;
 public class TeamTests
 {
     [Fact]
-    public void AddPlayer_ShouldAddPlayerToTeam()
+    public void Addteam_ShouldAddteamToTeam()
     {
         // Arrange
-        var team = new Team { Id = 1, Name = "Team A", SportType = "Football", FoundedDate = DateTime.Now, HomeStadium = "Stadium A", Players = new List<Player>() };
+        var team = new Team { Id = 1, Name = "Team A", SportType = "Basketball", FoundedDate = DateTime.Now, HomeStadium = "Stadium A", Players = new List<Player>() };
 
-        var player = new Player { Id = 1, FirstName = "John", LastName = "Doe", Position = "Guard", TeamId = 1, Goals = 2};
+        // Act & Assert
+        Assert.Equal(1, team.Id);
+        Assert.Equal("Team A", team.Name);
+        Assert.Equal("Basketball", team.SportType);
+        Assert.IsType<DateTime>(team.FoundedDate);
+        Assert.Equal("Stadium A", team.HomeStadium);
+        Assert.IsAssignableFrom<ICollection<Player>>(team.Players);
 
-
-        // Act
-        team.Players.Add(player);
-
-        // Assert
-        Assert.Contains(player, team.Players);
     }
 }

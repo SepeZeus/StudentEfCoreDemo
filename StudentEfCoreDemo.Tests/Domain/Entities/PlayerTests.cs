@@ -4,18 +4,17 @@ using Xunit;
 public class PlayerTests
 {
     [Fact]
-    public void AddPlayer_ShouldAddPlayerToTeam()
+    public void Player_Should_Have_Valid_Properties()
     {
         // Arrange
-        var team = new Team { Id = 1, Name = "Team A", SportType = "Football", FoundedDate = DateTime.Now, HomeStadium = "Stadium A", Players = new List<Player>() };
+        var player = new Player { Id = 1, FirstName = "John", LastName = "Doe", Position = "Guard", TeamId = 1, Goals = 2 };
 
-        var player = new Player { Id = 1, FirstName = "John", LastName = "Doe", Position = "Guard", TeamId = 1, Goals = 2};
-
-
-        // Act
-        team.Players.Add(player);
-
-        // Assert
-        Assert.Contains(player, team.Players);
+        // Act & Assert
+        Assert.Equal(1, player.Id);
+        Assert.Equal("John", player.FirstName);
+        Assert.Equal("Doe", player.LastName);
+        Assert.Equal("Guard", player.Position);
+        Assert.Equal(1, player.TeamId);
+        Assert.Equal(2, player.Goals);
     }
 }
