@@ -16,9 +16,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Stude
 
 // Add DbContext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<StudentContext>(options => options.UseSqlServer(connectionString));
-//builder.Services.AddDbContext<TeamsContext>(options => options.UseSqlServer(connectionString));
-//builder.Services.AddDbContext<PlayersContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<SportsContext>(options => options.UseSqlServer(connectionString));
 
 // Add Repositories
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();

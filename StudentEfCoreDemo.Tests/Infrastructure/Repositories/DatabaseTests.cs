@@ -8,11 +8,11 @@ namespace StudentEfCoreDemo.Tests.Infrastructure.Repositories
 {
     public class DatabaseTests
     {
-        private readonly DbContextOptions<StudentContext> _dbContextOptions;
+        private readonly DbContextOptions<SportsContext> _dbContextOptions;
 
         public DatabaseTests()
         {
-            _dbContextOptions = new DbContextOptionsBuilder<StudentContext>()
+            _dbContextOptions = new DbContextOptionsBuilder<SportsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
                 .Options;
         }
@@ -21,7 +21,7 @@ namespace StudentEfCoreDemo.Tests.Infrastructure.Repositories
         public async Task AddPlayer_ShouldAddPlayerToDatabase()
         {
             // Arrange
-            using var context = new StudentContext(_dbContextOptions);
+            using var context = new SportsContext(_dbContextOptions);
             var player = new Player { Id = 1, FirstName = "John", LastName = "Doe", Position = "Guard", TeamId = 1, Goals = 2 };
 
             // Act

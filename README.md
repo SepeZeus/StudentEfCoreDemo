@@ -1,220 +1,123 @@
-# StudentEfCoreDemo - Clean Architecture Implementation Guide
+# Student EF Core Demo API (Replace with actual Project Name if different)
 
-This guide explains how to implement new features in the StudentEfCoreDemo system using Clean Architecture principles and CQRS pattern with MediatR.
+This project is an ASP.NET Core Web API demonstrating the implementation of Clean Architecture principles for managing sports Players and Teams. It utilizes Entity Framework Core for data persistence, MediatR for implementing the CQRS pattern, and Xunit for testing.
 
-## Project Structure
+## Overview
 
-The solution is organized into four projects following Clean Architecture principles:
+The API provides endpoints for performing CRUD (Create, Read, Update, Delete) operations on Player and Team resources. It follows the Clean Architecture pattern, separating concerns into distinct layers: Domain, Application, Infrastructure, and Presentation (API).
 
-- **StudentEfCoreDemo.Domain**: Contains business entities and domain logic
-- **StudentEfCoreDemo.Application**: Contains business rules, interfaces, and CQRS commands/queries
-- **StudentEfCoreDemo.Infrastructure**: Contains data access and external service implementations
-- **StudentEfCoreDemo.API**: Contains API controllers and configuration
+## Features
 
-## Step-by-Step Guide for Implementing New Features
+* **Player Management:**
+    * Create new players.
+    * Retrieve a list of all players.
+    * Retrieve a specific player by ID.
+    * Update existing player details.
+    * Delete players.
+* **Team Management:**
+    * Create new teams with details like name, sport type, founded date, stadium, and max roster size.
+    * Retrieve a list of all teams.
+    * Retrieve a specific team by ID (including its players).
+    * Update existing team details.
+    * Delete teams.
+* **Business Logic:**
+    * Validates that a player cannot be created or assigned to a team if the team's maximum roster size (`MaxRosterSize`) would be exceeded.
 
-### 1. Domain Layer (StudentEfCoreDemo.Domain)
+## Technology Stack
 
-Start by defining your domain entities in the Domain layer:
+* **.NET 8.0**
+* **ASP.NET Core 8:** For building the Web API.
+* **Entity Framework Core 8:** ORM for data access.
+    * `Microsoft.EntityFrameworkCore`
+    * `Microsoft.EntityFrameworkCore.SqlServer`: SQL Server provider.
+    * `Microsoft.EntityFrameworkCore.Tools`: For EF Core migrations.
+* **SQL Server:** Relational database (can be configured for others via EF Core providers).
+* **MediatR:** For implementing CQRS pattern (Commands, Queries, Handlers).
+* **Swashbuckle:** For API documentation and Swagger UI.
+    * `Swashbuckle.AspNetCore`
+    * `Swashbuckle.AspNetCore.Swagger`
+    * `Swashbuckle.AspNetCore.SwaggerGen`
+    * `Swashbuckle.AspNetCore.SwaggerUI`
+* **Xunit:** Testing framework.
+* **Moq / Moq.EntityFrameworkCore:** For mocking dependencies in unit tests.
 
-1. Create a new entity class in `Domain/Entities/`
-   ```csharp
-   namespace StudentEfCoreDemo.Domain.Entities
-   {
-       public class YourEntity
-       {
-           public int Id { get; set; }
-           // Add other properties
-       }
-   }
-   ```
+## Architecture
 
-2. Add any domain-specific validation or business rules
-3. Keep the domain layer pure and free of dependencies on other layers
+This project adheres to the **Clean Architecture** principles:
 
-### 2. Application Layer (StudentEfCoreDemo.Application)
+1.  **Domain Layer (`StudentEfCoreDemo.Domain`):** Contains core business entities (`Player.cs`, `Team.cs`) and domain logic. Has no dependencies on other layers.
+2.  **Application Layer (`StudentEfCoreDemo.Application`):** Contains application-specific logic.
+    * Defines interfaces for repositories (`IPlayerRepository.cs`, `ITeamRepository.cs`).
+    * Includes DTOs (`PlayerDto.cs`, `TeamDto.cs`, `CreateTeamDto.cs`) for data transfer.
+    * Implements use cases using MediatR Commands (`CreatePlayerCommand.cs`, `UpdateTeamCommand.cs`, etc.) and Queries (`GetPlayerByIdQuery.cs`, `GetTeamsQuery.cs`, etc.) along with their Handlers.
+    * Depends only on the Domain layer.
+3.  **Infrastructure Layer (`StudentEfCoreDemo.Infrastructure`):** Handles external concerns like data access and services.
+    * Provides concrete implementations of repositories (`PlayerRepository.cs`, `TeamRepository.cs`) using Entity Framework Core.
+    * Contains the EF Core DbContext (`StudentContext.cs`).
+    * Depends on the Application layer (to implement its interfaces).
+4.  **Presentation Layer (`StudentEfCoreDemo.API`):** The entry point of the application.
+    * ASP.NET Core Web API project (`Program.cs`).
+    * Contains API Controllers (`PlayersController.cs`, `TeamsController.cs`) which orchestrate requests by sending Commands/Queries via MediatR.
+    * Depends on the Application layer.
 
-The Application layer is where most of the implementation work happens. Follow these steps:
+**Dependency Rule:** Dependencies flow inwards (Presentation -> Application -> Domain, Infrastructure -> Application).
 
-1. **Create DTOs**
-   - Create a new DTO class in `Application/DTOs/`
-   ```csharp
-   namespace StudentEfCoreDemo.Application.DTOs
-   {
-       public class YourEntityDto
-       {
-           public int Id { get; set; }
-           // Add properties matching your entity
-       }
-   }
-   ```
+## Getting Started
 
-2. **Define Repository Interface**
-   - Create a new interface in `Application/Interfaces/`
-   ```csharp
-   namespace StudentEfCoreDemo.Application.Interfaces
-   {
-       public interface IYourEntityRepository
-       {
-           Task<IEnumerable<YourEntity>> GetAllAsync();
-           Task<YourEntity?> GetByIdAsync(int id);
-           Task<YourEntity> AddAsync(YourEntity entity);
-           Task UpdateAsync(YourEntity entity);
-           Task DeleteAsync(int id);
-           Task<bool> ExistsAsync(int id);
-       }
-   }
-   ```
+### Prerequisites
 
-3. **Create Commands and Queries**
-   - Create command classes in `Application/Features/YourFeature/Commands/`
-   ```csharp
-   public record CreateYourEntityCommand : IRequest<YourEntityDto>
-   {
-       // Add properties needed for creation
-   }
-   ```
-   - Create query classes in `Application/Features/YourFeature/Queries/`
-   ```csharp
-   public record GetYourEntityQuery : IRequest<YourEntityDto>
-   {
-       public int Id { get; init; }
-   }
-   ```
+* [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+* A SQL Server instance (e.g., SQL Server Express, SQL Server Developer Edition, Docker container, Azure SQL Database).
+* [Optional] EF Core Tools (Install globally via `dotnet tool install --global dotnet-ef` or use project-local tools).
 
-4. **Implement Command/Query Handlers**
-   - Create handlers in the same folders as their commands/queries
-   ```csharp
-   public class CreateYourEntityCommandHandler : IRequestHandler<CreateYourEntityCommand, YourEntityDto>
-   {
-       private readonly IYourEntityRepository _repository;
+### Installation & Setup
 
-       public CreateYourEntityCommandHandler(IYourEntityRepository repository)
-       {
-           _repository = repository;
-       }
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/SepeZeus/StudentEfCoreDemo.git
+    cd StudentEfCoreDemo
+    ```
+2.  **Configure Database Connection:**
+    * Open `src/StudentEfCoreDemo.API/appsettings.json` (or `appsettings.Development.json`).
+    * Update the `ConnectionStrings` section with your SQL Server connection details
+3.  **Apply EF Core Migrations:**
+    * Run the database update command (this creates the database and schema if they don't exist):
+        ```bash
+        dotnet ef database update --project StudentEfCoreDemo.Infrastructure --startup-project StudentEfCoreDemo.API
+        ```
 
-       public async Task<YourEntityDto> Handle(CreateYourEntityCommand request, CancellationToken cancellationToken)
-       {
-           // Implement the business logic
-       }
-   }
-   ```
+### Running the Application
 
-### 3. Infrastructure Layer (StudentEfCoreDemo.Infrastructure)
+1.  **Navigate to the API project directory:**
+    ```bash
+    cd src/StudentEfCoreDemo.API
+    ```
+2.  **Run the application:**
+    ```bash
+    dotnet run
+    ```
+3.  **Access the API:**
+    * The API will typically be available at `https://localhost:7xx /` or `http://localhost:5xx /` (check the console output for the exact URLs). (Notably, it should auto open the Swagger UI in your default web browser.)
+    * Access the Swagger UI for interactive documentation and testing at `/swagger`.
 
-Implement the data access and external service integrations:
+4.  **Test the API:**
+    * Create a team through the Teams post endpoint (make sure to set the MaxRosterSize to > 0).
+    * Cerate a player through the Players post endpoint (make sure to set the TeamId to a valid team).
 
-1. **Update DbContext**
-   - Add your entity to `Infrastructure/Data/StudentContext.cs`
-   ```csharp
-   public DbSet<YourEntity> YourEntities { get; set; } = null!;
-   ```
+## Running Tests
 
-2. **Implement Repository**
-   - Create repository implementation in `Infrastructure/Repositories/`
-   ```csharp
-   public class YourEntityRepository : IYourEntityRepository
-   {
-       private readonly StudentContext _context;
+1.  **Navigate to the solution root directory or the test project directory.**
+2.  **Run the tests using the .NET CLI:**
+    ```bash
+    dotnet test
+    ```
+    This command will discover and execute all Xunit tests across the solution.
 
-       public YourEntityRepository(StudentContext context)
-       {
-           _context = context;
-       }
+## API Endpoints
 
-       // Implement interface methods
-   }
-   ```
+The API exposes endpoints under the `/api` route:
 
-### 4. API Layer (StudentEfCoreDemo.API)
+* `/api/players`: Endpoints for Player CRUD operations.
+* `/api/teams`: Endpoints for Team CRUD operations.
 
-Create the API endpoints:
-
-1. **Create Controller**
-   - Create a new controller in `API/Controllers/`
-   ```csharp
-   [ApiController]
-   [Route("api/[controller]")]
-   public class YourEntityController : ControllerBase
-   {
-       private readonly IMediator _mediator;
-
-       public YourEntityController(IMediator mediator)
-       {
-           _mediator = mediator;
-       }
-
-       [HttpGet]
-       public async Task<ActionResult<IEnumerable<YourEntityDto>>> GetAll()
-       {
-           var query = new GetYourEntitiesQuery();
-           var result = await _mediator.Send(query);
-           return Ok(result);
-       }
-
-       // Add other endpoints
-   }
-   ```
-
-2. **Register Dependencies**
-   - Add repository registration in `Program.cs`
-   ```csharp
-   builder.Services.AddScoped<IYourEntityRepository, YourEntityRepository>();
-   ```
-
-### 5. Database Migration
-
-After implementing the feature, create and apply the database migration:
-
-1. Open Package Manager Console
-2. Set Default Project to `StudentEfCoreDemo.Infrastructure`
-3. Run the following commands:
-   ```powershell
-   Add-Migration AddYourEntity
-   Update-Database
-   ```
-
-## Best Practices
-
-1. **Dependency Direction**
-   - Domain layer should have no dependencies
-   - Application layer depends only on Domain
-   - Infrastructure depends on Application
-   - API depends on Application and Infrastructure
-
-2. **CQRS Pattern**
-   - Use commands for write operations (Create, Update, Delete)
-   - Use queries for read operations (Get, List)
-   - Keep commands and queries focused and single-purpose
-
-3. **DTOs**
-   - Use DTOs to decouple API models from domain models
-   - Keep DTOs simple and focused on data transfer
-   - Avoid business logic in DTOs
-
-4. **Repository Pattern**
-   - Keep repository interfaces in Application layer
-   - Implement repositories in Infrastructure layer
-   - Use async/await for all database operations
-
-5. **Error Handling**
-   - Implement proper error handling in handlers
-   - Return appropriate HTTP status codes from controllers
-   - Consider adding validation using FluentValidation
-
-## Testing
-
-1. **Unit Tests**
-   - Test command/query handlers
-   - Test domain logic
-   - Mock dependencies using Moq
-
-2. **Integration Tests**
-   - Test repository implementations
-   - Test API endpoints
-   - Use test database for integration tests
-
-## Example Implementation
-
-For a complete example, look at the Student feature implementation in the codebase, which follows all these principles and patterns. 
+Refer to the **Swagger UI** (accessible at `/swagger` when the application is running) for detailed information about each endpoint, including HTTP methods, request/response models, and parameters.

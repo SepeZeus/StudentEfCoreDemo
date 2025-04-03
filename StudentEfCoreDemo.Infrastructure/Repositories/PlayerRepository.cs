@@ -12,9 +12,9 @@ namespace StudentEfCoreDemo.Infrastructure.Repositories
 {
     public class PlayerRepository : IPlayerRepository
     {
-        private readonly StudentContext _context;
+        private readonly SportsContext _context;
 
-        public PlayerRepository(StudentContext context)
+        public PlayerRepository(SportsContext context)
         {
             _context = context;
         }

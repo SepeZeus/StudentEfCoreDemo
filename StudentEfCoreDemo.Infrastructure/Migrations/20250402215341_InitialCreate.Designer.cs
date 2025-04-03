@@ -11,7 +11,7 @@ using StudentEfCoreDemo.Infrastructure.Data;
 
 namespace StudentEfCoreDemo.Infrastructure.Migrations
 {
-    [DbContext(typeof(StudentContext))]
+    [DbContext(typeof(SportsContext))]
     [Migration("20250402215341_InitialCreate")]
     partial class InitialCreate
     {

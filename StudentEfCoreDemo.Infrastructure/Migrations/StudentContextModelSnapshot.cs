@@ -10,7 +10,7 @@ using StudentEfCoreDemo.Infrastructure.Data;
 
 namespace StudentEfCoreDemo.Infrastructure.Migrations
 {
-    [DbContext(typeof(StudentContext))]
+    [DbContext(typeof(SportsContext))]
     partial class StudentContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

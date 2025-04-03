@@ -12,9 +12,9 @@ namespace StudentEfCoreDemo.Infrastructure.Repositories
 {
     public class TeamRepository : ITeamRepository
     {
-        private readonly StudentContext _context;
+        private readonly SportsContext _context;
 
-        public TeamRepository(StudentContext context)
+        public TeamRepository(SportsContext context)
         {
             _context = context;
         }

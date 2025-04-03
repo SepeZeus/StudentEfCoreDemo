@@ -10,7 +10,7 @@ using StudentEfCoreDemo.Infrastructure.Data;
 
 namespace StudentEfCoreDemo.Infrastructure.Migrations
 {
-    [DbContext(typeof(StudentContext))]
+    [DbContext(typeof(SportsContext))]
     [Migration("20250325143546_initial")]
     partial class initial
     {

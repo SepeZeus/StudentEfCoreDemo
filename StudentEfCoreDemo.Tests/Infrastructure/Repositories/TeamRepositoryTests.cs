@@ -10,12 +10,12 @@ namespace StudentEfCoreDemo.Tests.Infrastructure.Repositories
 {
     public class TeamRepositoryTests
     {
-        private StudentContext GetDbContext()
+        private SportsContext GetDbContext()
         {
-            var options = new DbContextOptionsBuilder<StudentContext>()
+            var options = new DbContextOptionsBuilder<SportsContext>()
                 .UseInMemoryDatabase(databaseName: "TeamRepositoryTestDb")
                 .Options;
-            return new StudentContext(options);
+            return new SportsContext(options);
         }
 
         [Fact]

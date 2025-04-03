@@ -72,4 +72,4 @@ namespace StudentEfCoreDemo.API.Controllers
             return NoContent();
         }
     }
-    }
+}
