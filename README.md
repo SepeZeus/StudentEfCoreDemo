@@ -1,4 +1,4 @@
-# Student EF Core Demo API (Replace with actual Project Name if different)
+# CLEAN Architecture and CQRS with ASP.NET Core 8 and EF Core 8
 
 This project is an ASP.NET Core Web API demonstrating the implementation of Clean Architecture principles for managing sports Players and Teams. It utilizes Entity Framework Core for data persistence, MediatR for implementing the CQRS pattern, and Xunit for testing.
 
